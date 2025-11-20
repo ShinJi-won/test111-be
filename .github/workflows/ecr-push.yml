@@ -1,0 +1,57 @@
+name: Build & Push to ECR (dev/prod)
+
+on:
+  push:
+    branches: ["dev", "main"]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 1. AWS CREDENTIALS
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 2. 환경(dev/prod)에 따라 ECR 저장소 선택
+      - name: Set environment variables
+        id: env
+        run: |
+          if [ "${GITHUB_REF_NAME}" = "dev" ]; then
+            echo "ecr_repo=${{ secrets.ECR_REPO_DEV }}" >> $GITHUB_OUTPUT
+            echo "env_name=dev" >> $GITHUB_OUTPUT
+          else
+            echo "ecr_repo=${{ secrets.ECR_REPO_PROD }}" >> $GITHUB_OUTPUT
+            echo "env_name=prod" >> $GITHUB_OUTPUT
+          fi
+
+      # 3. 이미지 태그: 환경 이름 + timestamp
+      - name: Set Image Tag
+        id: tag
+        run: echo "image_tag=${{ steps.env.outputs.env_name }}-$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
+
+      # 4. Docker Build
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ steps.env.outputs.ecr_repo }}:${{ steps.tag.outputs.image_tag }} \
+            .
+
+      # 5. Docker Push
+      - name: Push Docker image
+        run: |
+          docker push \
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ steps.env.outputs.ecr_repo }}:${{ steps.tag.outputs.image_tag }}
+
+      - name: Show Pushed Image
+        run: echo "Pushed image: ${{ steps.env.outputs.env_name }} / ${{ steps.tag.outputs.image_tag }}"
