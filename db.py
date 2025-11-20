@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 # Docker Compose 환경변수 사용
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "mysql+pymysql://root:1234@db:3306/sjw2?charset=utf8mb4"
+    "mysql+pymysql://root:1234@172.31.45.157:3306/sjw2?charset=utf8mb4"
 )
 
 # SQLAlchemy 엔진 생성
