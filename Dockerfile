@@ -5,7 +5,7 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # backend 폴더 전체를 /app/backend로 복사
-COPY ./backend ./backend
+COPY ./ ./
 
 # 시스템 의존성(컴파일 필요 패키지)
 RUN apt-get update \
@@ -25,4 +25,4 @@ RUN pip install --no-cache-dir --prefer-binary \
 RUN pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
 # 실행 (backend.main 모듈로 uvicorn 실행)
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
