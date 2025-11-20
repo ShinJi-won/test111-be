@@ -54,4 +54,5 @@ jobs:
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ steps.env.outputs.ecr_repo }}:${{ steps.tag.outputs.image_tag }}
 
       - name: Show Pushed Image
-        run: echo "Pushed image: ${{ steps.env.outputs.env_name }} / ${{ steps.tag.outputs.image_tag }}"
+        run: |
+            echo "Pushed image: ${{ steps.env.outputs.env_name }} / ${{ steps.tag.outputs.image_tag }}"
