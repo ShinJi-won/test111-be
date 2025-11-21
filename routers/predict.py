@@ -1,13 +1,13 @@
 import os
 from fastapi import APIRouter, UploadFile, File, Depends
 from sqlalchemy.orm import Session
-from ..db import SessionLocal
-from ..models import Prediction
-from ..ai_model import predict_image
+from db import SessionLocal
+from models import Prediction
+from ai_model import predict_image
 
 router = APIRouter(prefix="/predict", tags=["Prediction"])
 
-UPLOAD_DIR = "backend/uploads"
+UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 def get_db():

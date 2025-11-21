@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.db import engine
-from backend.models import Base
-from backend.routers import predict
+from db import engine
+from models import Base
+from routers import predict
 
 
 # DB 테이블 생성
