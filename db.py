@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 # Docker Compose 환경변수 사용
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "mysql+pymysql://root:1234@15.165.160.125:3306/sjw2?charset=utf8mb4"
+    "mysql+pymysql://root:1234@43.201.8.142:3306/sjw2?charset=utf8mb4"
     # "mysql+pymysql://root:1234@localhost:3306/sjw2?charset=utf8mb4"
 )
 
@@ -34,25 +34,3 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
-
-#from sqlalchemy import create_engine
-#from sqlalchemy.ext.declarative import declarative_base
-#from sqlalchemy.orm import sessionmaker
-#import os
-# MySQL 연결 URL 형식
-# mysql+pymysql://USER:PASSWORD@localhost/DATABASE
-#SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:1234@localhost/sjw2?charset=utf8mb4"
-
-#DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://root:1234@db:3306/sjw2")
-#engine = create_engine(DATABASE_URL)
-
-#engine = create_engine(
-#    SQLALCHEMY_DATABASE_URL,
-#    pool_pre_ping=True,
-#    echo=True  # 쿼리 로그 보기 원치 않으면 False
-#)
-
-#SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
-#Base = declarative_base()

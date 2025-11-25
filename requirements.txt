@@ -5,3 +5,4 @@ pymysql
 pillow
 python-multipart
 requests
+python-dotenv
